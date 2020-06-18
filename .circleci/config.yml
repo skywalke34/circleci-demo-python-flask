@@ -128,7 +128,7 @@ workflows:
               only: master
       - neuvector/scan-image:
           requires:
-            - build
+            - builddocker
           context: myContext
           registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
           repository: dev34
