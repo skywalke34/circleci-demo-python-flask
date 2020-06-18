@@ -83,8 +83,8 @@ workflows:
             branches:
               only: master
       - scan:
-        requires:
-          - build
-        filters:
-          branches:
-            only: master
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
