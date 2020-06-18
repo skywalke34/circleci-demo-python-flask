@@ -66,7 +66,7 @@ jobs:
   scan:
     executor: docker-publisher
     steps:
-      - neuvector/scan-image:
+      - scan-image:
           context: myContext
           registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
           repository: dev34
