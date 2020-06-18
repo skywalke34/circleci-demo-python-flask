@@ -67,14 +67,6 @@ jobs:
     executor: docker-publisher
     steps:
       - setup_remote_docker
-      - neuvector/scan-image:
-          context: myContext
-          registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
-          repository: dev34
-          tag: 'latest'
-          scan_layers: true
-          high_vul_to_fail: 0
-          medium_vul_to_fail: 3
 workflows:
   build-and-scan-image:
     jobs:
@@ -82,9 +74,16 @@ workflows:
           filters:
             branches:
               only: master
-      - scan:
+      - neuvector/scan-image:
           requires:
             - build
+            context: myContext
+          registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
+          repository: dev34
+          tag: 'latest'
+          scan_layers: true
+          high_vul_to_fail: 0
+          medium_vul_to_fail: 3
           filters:
             branches:
               only: master
