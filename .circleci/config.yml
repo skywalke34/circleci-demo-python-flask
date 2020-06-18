@@ -1,6 +1,8 @@
 version: 2.1
-jobs:
-  build:
+orbs:
+  neuvector: neuvector/neuvector-orb@1.0.0
+executors:
+  docker-publisher:
     environment:
       IMAGE_NAME: skywalke34/dev34
     docker:
@@ -13,6 +15,9 @@ jobs:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: circle_test
           POSTGRES_PASSWORD: ''
+jobs:
+  build:
+    executor: docker-publisher
     steps:
       - checkout
       - run: mkdir test-reports
@@ -58,18 +63,28 @@ jobs:
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push $IMAGE_NAME:latest
-orbs:
-  neuvector: neuvector/neuvector-orb@1.0.0
+  scan:
+    executor: docker-publisher
+    steps:
+    - neuvector/scan-image:
+        context: myContext
+        registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
+        repository: dev34
+        tag: 'latest'
+        scan_layers: true
+        high_vul_to_fail: 0
+        medium_vul_to_fail: 3
 workflows:
   version: 2
   build-and-scan-image:
     jobs:
-      - build
-      - neuvector/scan-image:
-          context: myContext
-          registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
-          repository: dev34
-          tag: 'latest'
-          scan_layers: true
-          high_vul_to_fail: 0
-          medium_vul_to_fail: 3
+      - build:
+          filters:
+            branches:
+              only: master
+      - scan:
+        requires:
+          - build
+        filters:
+          branches:
+            only: master
