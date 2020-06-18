@@ -1,7 +1,5 @@
-version: 2.1
-orbs:
-  neuvector: neuvector/neuvector-orb@1.0.0
-workflows:
+version: 2
+jobs:
   build:
     environment:
       IMAGE_NAME: skywalke34/dev34
@@ -15,7 +13,7 @@ workflows:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: circle_test
           POSTGRES_PASSWORD: ''
-    jobs:
+    steps:
       - checkout
       - run: mkdir test-reports
       - run:
@@ -61,11 +59,15 @@ workflows:
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push $IMAGE_NAME:latest
-  scan-image:
+version: 2.1
+orbs:
+  neuvector: neuvector/neuvector-orb@1.0.0
+workflows:
+  version: 2
+  build-and-scan-image:
     jobs:
+      - build
       - neuvector/scan-image:
-          requires:
-            - build
           context: myContext
           registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
           repository: dev34
