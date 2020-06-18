@@ -1,6 +1,4 @@
-version: 2.1
-orbs:
-  neuvector: neuvector/neuvector-orb@1.0.0
+version: 2
 jobs:
   build:
     environment:
@@ -63,6 +61,9 @@ jobs:
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push $IMAGE_NAME:latest
+version: 2.1
+orbs:
+  neuvector: neuvector/neuvector-orb@1.0.0
 workflows:
   scan-image:
     jobs:
