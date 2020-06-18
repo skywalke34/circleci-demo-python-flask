@@ -58,26 +58,11 @@ jobs:
           name: Build Docker image
           command: |
             docker build -t $IMAGE_NAME:latest .
-  publish-latest:
-    environment:
-      IMAGE_NAME: dev34
-      docker:
-      - image: circleci/python:3.6.2-stretch-browsers
-        environment:
-          FLASK_CONFIG: testing
-          TEST_DATABASE_URL: postgresql://ubuntu@localhost/circle_test?sslmode=disable
-      - image: circleci/postgres:9.6.5-alpine-ram
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: circle_test
-          POSTGRES_PASSWORD: ''
-      steps:
-        - setup_remote_docker
-        - run:
-            name: Publish Docker Image to Docker Hub
-            command: |
-              echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-              docker push $IMAGE_NAME:latest
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:latest
 workflows:
   scan-image:
     jobs:
