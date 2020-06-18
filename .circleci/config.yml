@@ -66,14 +66,14 @@ jobs:
   scan:
     executor: docker-publisher
     steps:
-    - neuvector/scan-image:
-        context: myContext
-        registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
-        repository: dev34
-        tag: 'latest'
-        scan_layers: true
-        high_vul_to_fail: 0
-        medium_vul_to_fail: 3
+      - neuvector/scan-image:
+          context: myContext
+          registry_url: 'https://hub.docker.com/repository/docker/skywalke34/'
+          repository: dev34
+          tag: 'latest'
+          scan_layers: true
+          high_vul_to_fail: 0
+          medium_vul_to_fail: 3
 workflows:
   version: 2
   build-and-scan-image:
