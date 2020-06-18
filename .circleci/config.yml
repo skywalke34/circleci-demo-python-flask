@@ -89,15 +89,3 @@ workflows:
           scan_layers: true
           high_vul_to_fail: 0
           medium_vul_to_fail: 3
-  build-master:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: master
-      - publish-latest:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
